@@ -38,5 +38,16 @@ class PostController1 extends Controller
          //$request->session()->reflash;
          
      }
+
+     public function edit($id)
+     {
+         $post=BlogPost::findOrFail($id); 
+        return view('posts.edit');
+     }
+     public function update()
+     { 
+       
+     }
+   
    
 }
