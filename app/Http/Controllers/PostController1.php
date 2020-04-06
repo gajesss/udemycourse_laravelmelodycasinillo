@@ -32,7 +32,7 @@ class PostController1 extends Controller
         return redirect()->route('posts.show',['post'=>$blogPost->id]);
     }
 
-     public function show(Request $request, $id)
+     public function show( $id)
      {
          return view('posts.show',['post'=>BlogPost::FindOrFail($id)]);
          //$request->session()->reflash;
@@ -42,11 +42,23 @@ class PostController1 extends Controller
      public function edit($id)
      {
          $post=BlogPost::findOrFail($id); 
-        return view('posts.edit');
+        return view('posts.edit',['post'=>$post]);
      }
-     public function update()
+     public function update(StorePost $request, $id)
      { 
+        $post=BlogPost::findOrFail($id); 
+        $validatedData = $request->validated();
+        $post->fill($validatedData);
+        $request->session()->flash('status','Blog post was created');
+        return redirect()->route('posts.show',['post'=>$post->id]);
        
+     }
+     public function destroy(Request $request,$id)
+     {
+        $post=BlogPost::findOrFail($id); 
+        $post->delete();
+        $request->session()->flash('status','Blog post was deleted');
+        return redirect()->route('posts.index');
      }
    
    
