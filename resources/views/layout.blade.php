@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <title>Melody</title>
 </head>
 <body>
-    <ul>
-        <li><a href="{{ route('welcome') }}">Start</a></li>
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('contact') }}">Contact</a></li>
-        <li><a href="{{ route('posts.index') }}">Blogpost</a></li>
-        <li><a href="{{ route('posts.create') }}">Create</a></li>
-    </ul>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto font-weight-normal">MELODY GAJES CASINILLO</h5>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark" href="{{ route('welcome') }}">Start</a></li>
+            <a class="p-2 text-dark" href="{{ route('home') }}">Home</a>
+            <a class="p-2 text-dark" href="{{ route('contact') }}">Contact</a>
+            <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
+            <a class="p-2 text-dark" href="{{ route('posts.create') }}">Add Blog Post</a>
+        </nav>
+    </div>
+    <div class="container">
+
     @if (session()->has('status'))
     <p style="color:green">
         {{ session()->get('status') }}        </p>
@@ -22,5 +28,7 @@
 
      
     @yield('content')
+    </div>
+    <script src="{{ mix('js/app.js')}}"></script'>
 </body>
 </html>
