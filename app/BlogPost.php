@@ -15,4 +15,3 @@ class BlogPost extends Model
 
    protected $fillable=['title','content'];
 }
-
