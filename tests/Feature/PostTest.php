@@ -98,7 +98,7 @@ $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
         $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
        
         $this-> delete("/posts/{$post->id}")
-        ->assertStatus(500)
+        ->assertStatus(302)
         ->assertSessionHas('status');
         $this->assertEquals(session('status'),'Blog post was deleted');
        

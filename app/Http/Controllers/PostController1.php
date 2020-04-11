@@ -43,7 +43,7 @@ class PostController1 extends Controller
 
      public function show( $id)
      {
-         return view('posts.show',['post'=>BlogPost::FindOrFail($id)]);
+         return view('posts.show',['post'=>BlogPost::with('comments')->FindOrFail($id)]);
          //$request->session()->reflash;
          
      }
@@ -71,7 +71,7 @@ class PostController1 extends Controller
         $post=BlogPost::findOrFail($id); 
         $post->delete();
         $request->session()->flash('status','Blog post was deleted');
-        return redirect()->route('posts.indexb');
+        return redirect()->route('posts.index');
         $post->save();
      }
    
