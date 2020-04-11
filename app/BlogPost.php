@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlogPost extends Model
 {
+
+
+   public function comments()
+   {
+       return $this->hasMany('App\Comment');
+   }
+
    protected $dates = [
       'created_at',
       'updated_at',
@@ -14,4 +21,5 @@ class BlogPost extends Model
 
 
    protected $fillable=['title','content'];
+
 }
