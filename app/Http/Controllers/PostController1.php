@@ -55,10 +55,13 @@ class PostController1 extends Controller
      }
      public function update(StorePost $request, $id)
      { 
+        
+
+
         $post=BlogPost::findOrFail($id); 
-        $validatedData = $request->validated();
+       $validatedData = $request->validated();
         $post->fill($validatedData);
-        $request->session()->flash('status','Blog post was updated');
+       $request->session()->flash('status','Blog post was updated');
         return redirect()->route('posts.show',['post'=>$post->id]);
         $post->save();
        
@@ -68,7 +71,7 @@ class PostController1 extends Controller
         $post=BlogPost::findOrFail($id); 
         $post->delete();
         $request->session()->flash('status','Blog post was deleted');
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.indexb');
         $post->save();
      }
    

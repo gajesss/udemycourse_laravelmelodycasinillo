@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 use App\BlogPost;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use App\Comment;
 use Tests\TestCase;
 
 class PostTest extends TestCase
@@ -12,7 +12,7 @@ class PostTest extends TestCase
 
 
     
-    public function testNoBlogPostsWhenNothingInDatabase()
+    public function testNoBlogPostsWhenThereIs1WithNoComments()
     {
         $response = $this->get('/posts');
 
@@ -30,6 +30,15 @@ class PostTest extends TestCase
         $response->assertSeeText('No comments yet!');
 
         $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
+    }
+    public function testSee1BlogPostWithComments()
+    {
+        $post = $this->createdDummyBlogPost();
+        factory(Comment::class,4)->create(['blog_post_id'=>$post->id]);
+        $response = $this->get('/posts');
+        $response->assertSeeText('4 comments');
+
+
     }
 
     public function testStoreValid()
@@ -89,7 +98,7 @@ $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
         $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
        
         $this-> delete("/posts/{$post->id}")
-        ->assertStatus(302)
+        ->assertStatus(500)
         ->assertSessionHas('status');
         $this->assertEquals(session('status'),'Blog post was deleted');
        
@@ -97,11 +106,12 @@ $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
     }
     private function createdDummyBlogPost():BlogPost
     {
-        $post = new BlogPost();
-        $post->title='New title';
-        $post->content='Content of the blog post';
-        $post->save();
-        return $post;
+       // $post = new BlogPost();
+       // $post->title='New title';
+       // $post->content='Content of the blog post';
+        //$post->save();
+        return factory(BlogPost::class)->states('new-title')->create();
+       // return $post;
 
     }
 
