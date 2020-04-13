@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,7 +15,19 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
     
 
-        factory(App\User::class)->states('melody-basubas')->create();
-        factory(App\User::class, 20)->create();
+        $basubas = factory(App\User::class)->states('melody-basubas')->create();
+        $else = factory(App\User::class, 20)->create();
+
+        $users = $else->concat([$basubas]);
+
+        $posts = factory(App\BlogPost::class, 20)->make()->each(function($post) use ($users) {
+            $post->user_id = $users->random()->id;
+            $post->save();
+        });
+
+        $comments = factory(App\Comment::class, 150)->make()->each(function ($comment) use ($posts) {
+            $comment->blog_post_id = $posts->random()->id;
+            $comment->save();
+        });
     }
 }
