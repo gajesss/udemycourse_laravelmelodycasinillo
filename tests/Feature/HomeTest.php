@@ -21,7 +21,7 @@ class HomeTest extends TestCase
     }
     public function testLaravelPageIsWorkingCorrectly()
     {
-        $response = $this->get('/home');
+        $response = $this->get('/contact');
 
         $response->assertSeeText('Welcome to Laravel!');
     }

@@ -48,9 +48,11 @@ $params=[
     'content'=>'Atleast 10 characters'
 ];
 
-$this-> post('/posts', $params)
-->assertStatus(302)
-->assertSessionHas('status');
+$this->actingAs($this->user())
+            ->post('/posts', $params)
+            ->assertStatus(302)
+            ->assertSessionHas('status');
+
 
 $this->assertEquals(session('status'),'Blog post was created');
     }
@@ -62,9 +64,10 @@ $this->assertEquals(session('status'),'Blog post was created');
             'title'=>'x',
             'content'=>'x'
         ];
-        $this-> post('/posts', $params)
-->assertStatus(302)
-->assertSessionHas('errors');
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
+            ->assertStatus(302)
+            ->assertSessionHas('errors');
 
 $messages=session('errors')->getMessages();
 
@@ -83,9 +86,10 @@ $this->assertEquals($messages['content'][0],"The content must be at least 5 char
             'title'=>'name changed',
             'content'=>'content changed'
         ];
-        $this-> put("/posts/{$post->id}", $params)
-->assertStatus(302)
-->assertSessionHas('status');
+        $this->actingAs($this->user())
+        ->put("/posts/{$post->id}", $params)
+        ->assertStatus(302)
+        ->assertSessionHas('status');
 $this->assertEquals(session('status'),'Blog post was updated');
 
 $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
@@ -97,9 +101,10 @@ $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
         $post = $this->createdDummyBlogPost();
         $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
        
-        $this-> delete("/posts/{$post->id}")
-        ->assertStatus(302)
-        ->assertSessionHas('status');
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
+            ->assertStatus(302)
+            ->assertSessionHas('status');
         $this->assertEquals(session('status'),'Blog post was deleted');
        
       

@@ -11,7 +11,6 @@
     <title>Melody</title>
 </head>
 <body>
-    
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto font-weight-normal">MELODY GAJES CASINILLO</h5>
         <nav class="my-2 my-md-0 mr-md-3">
@@ -26,20 +25,15 @@
                     <a class="p-2 text-dark" href="{{ route('register') }}">{{ __('Register') }}</a>
             @endif
             <a class="p-2 text-dark" href="{{ route('login') }}">{{ __('Login') }}</a>
+        
         @else
-            <li class="item dropdown">
-                <a id="Dropdown" class="link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ Auth::user()->name }} <span class="caret"></span>
-                </a>
+        <a class="p-2 text-dark" href="{{ route('logout') }}"
+            onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+          
+            >Logout ({{ Auth::user()->name }})</a>
 
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        <form id="logout-form" action={{ route('logout') }} method="POST"
+            style="display: none;">
                         @csrf
                     </form>
                 </div>
@@ -48,7 +42,6 @@
 
        
     </div>
-    
     <div class="container">
 
     @if (session()->has('status'))
