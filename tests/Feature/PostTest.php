@@ -43,6 +43,7 @@ class PostTest extends TestCase
 
     public function testStoreValid()
     {
+        $user =$this->user();
 $params=[
     'title'=>'Valid title',
     'content'=>'Atleast 10 characters'
