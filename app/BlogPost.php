@@ -13,13 +13,12 @@ class BlogPost extends Model
        return $this->hasMany('App\Comment');
    }
 
-   protected $dates = [
-      'created_at',
-      'updated_at',
-      'deleted_at'
-  ];
+   public static function boot()
+   {
+       parent::boot();
 
-
-   protected $fillable=['title','content'];
-
+       //static::deleting(function (BlogPost $blogPost) {
+        //   $blogPost->comments()->delete();
+       //});
+   }
 }
