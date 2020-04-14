@@ -1,24 +1,27 @@
 <?php
 
 namespace App;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class BlogPost extends Model
 {
+    // protected $table = 'blogposts';
 
+    use SoftDeletes;
 
-   public function comments()
-   {
-       return $this->hasMany('App\Comment');
-   }
+    protected $fillable = ['title', 'content'];
 
-   public static function boot()
-   {
-       parent::boot();
-
-       //static::deleting(function (BlogPost $blogPost) {
-        //   $blogPost->comments()->delete();
-       //});
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
+    
+    public static function boot()
+    {
+        parent::boot();
+        // static::deleting(function (BlogPost $blogPost) {
+        //     $blogPost->comments()->delete();
+        // });
    }
 }
