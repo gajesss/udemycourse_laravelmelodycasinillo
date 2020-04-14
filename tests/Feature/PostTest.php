@@ -107,7 +107,8 @@ $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
             ->assertStatus(302)
             ->assertSessionHas('status');
         $this->assertEquals(session('status'),'Blog post was deleted');
-       
+       // $this->assertDatabaseMissing('blog_posts', $post->toArray());
+       $this->assertSoftDeleted('blog_posts', $post->toArray());
       
     }
     private function createdDummyBlogPost():BlogPost
