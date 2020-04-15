@@ -1,7 +1,15 @@
 @extends('layout')
 @section('content')
-<h1>Welcome to Laravel!</h1>
-<p>this is paragraph</p>
+<h1>Contact</h1>
+<p>Hello this is contact!</p>
+
+@can('home.secret')
+  <p>
+    <a href="{{ route('secret') }}">
+      Go to special contact details!
+    </a>
+  </p>
+@endcan
     
 @endsection
 

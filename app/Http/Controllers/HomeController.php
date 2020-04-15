@@ -20,11 +20,16 @@ class HomeController extends Controller
     public function contact()
     {
         return view('contact');
+        
     }
     public function welcome ()
     {
         return view('welcome');
+    }
+    public function secret()
+    {
+        return view('secret');
+    }
+}
 
 
-}
-}
