@@ -41,7 +41,7 @@ class BlogPostPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -66,6 +66,7 @@ class BlogPostPolicy
     public function delete(User $user, BlogPost $blogPost)
     {
         return $user->id == $blogPost->user_id;
+        //return true;
     }
 
     /**

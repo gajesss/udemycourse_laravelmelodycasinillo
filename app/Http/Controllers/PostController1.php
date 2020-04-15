@@ -6,6 +6,16 @@ use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+
+
+// [
+//     'show' => 'view',
+//     'create' => 'create',
+//     'store' => 'create',
+//     'edit' => 'update',
+//     'update' => 'update',
+//     'destroy' => 'delete',
+// ]
 class PostController1 extends Controller
 {
     public function __construct()
@@ -59,7 +69,8 @@ class PostController1 extends Controller
          //if (Gate::denies('update-post',$post)){
         //    abort(403, 'you cant edit po sorry');
        // }
-       $this->authorize('posts.update', $post);
+      // $this->authorize('posts.update', $post);
+      $this->authorize($post);
 
         return view('posts.edit',['post'=>$post]);
      }
@@ -73,7 +84,8 @@ class PostController1 extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't edit this blog post!");
         // }
-        $this->authorize('posts.update', $post);
+       // $this->authorize('posts.update', $post);
+       $this->authorize($post);
 
         $validatedData = $request->validated();
 
@@ -86,7 +98,8 @@ class PostController1 extends Controller
      public function destroy(Request $request,$id)
      {
         $post=BlogPost::findOrFail($id); 
-        $this->authorize('posts.delete', $post);
+        //$this->authorize('posts.delete', $post);
+        $this->authorize($post);
 
         $post->delete();
         $request->session()->flash('status','Blog post was deleted');

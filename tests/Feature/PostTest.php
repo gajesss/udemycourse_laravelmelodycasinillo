@@ -89,7 +89,7 @@ $this->assertEquals($messages['content'][0],"The content must be at least 5 char
         ];
         $this->actingAs($this->user())
         ->put("/posts/{$post->id}", $params)
-        ->assertStatus(302)
+        ->assertStatus(403)
         ->assertSessionHas('status');
 $this->assertEquals(session('status'),'Blog post was updated');
 
@@ -104,7 +104,7 @@ $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
        
         $this->actingAs($this->user())
             ->delete("/posts/{$post->id}")
-            ->assertStatus(302)
+            ->assertStatus(403)
             ->assertSessionHas('status');
         $this->assertEquals(session('status'),'Blog post was deleted');
        // $this->assertDatabaseMissing('blog_posts', $post->toArray());

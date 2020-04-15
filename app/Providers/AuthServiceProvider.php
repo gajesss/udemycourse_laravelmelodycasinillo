@@ -13,7 +13,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Model' => 'App\Policies\ModelPolicy',
+        'App\BlogPost' => 'App\Policies\BlogPostPolicy',
     ];
 
     /**
@@ -41,6 +42,20 @@ class AuthServiceProvider extends ServiceProvider
         //         return true;
         //     }
         // });
-        Gate::resource('posts', 'App\Policies\BlogPostPolicy');
+        //Gate::resource('posts', 'App\Policies\BlogPostPolicy');
+        // Gate::resource('posts', 'App\Policies\BlogPostPolicy');
+        // posts.create, posts.view, posts.update, posts.delete
+        // comments.create, comments.update etc.
+
+        // Gate::before(function ($user, $ability) {
+        //     if ($user->is_admin && in_array($ability, ['posts.update'])) {
+        //         return true;
+        //     }
+        // });
+        // Gate::after(function ($user, $ability, $result) {
+        //     if ($user->is_admin) {
+        //         return true;
+        //     }
+        // });
     }
 }
