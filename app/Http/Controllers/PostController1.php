@@ -66,21 +66,28 @@ class PostController1 extends Controller
      public function update(StorePost $request, $id)
      { 
         
-        $post=BlogPost::findOrFail($id); 
-       $this->authorize('update-post', $post);
+        $post = BlogPost::findOrFail($id);
 
-       $validatedData = $request->validated();
+       
+        
+        // if (Gate::denies('update-post', $post)) {
+        //     abort(403, "You can't edit this blog post!");
+        // }
+        $this->authorize('update-post', $post);
+
+        $validatedData = $request->validated();
+
         $post->fill($validatedData);
-       $request->session()->flash('status','Blog post was updated');
-        return redirect()->route('posts.show',['post'=>$post->id]);
         $post->save();
+        $request->session()->flash('status', 'Blog post was updated!');
+        return redirect()->route('posts.show', ['post' => $post->id]);
        
      }
      public function destroy(Request $request,$id)
      {
         $post=BlogPost::findOrFail($id); 
         $this->authorize('delete-post', $post);
-        
+
         $post->delete();
         $request->session()->flash('status','Blog post was deleted');
         return redirect()->route('posts.index');
