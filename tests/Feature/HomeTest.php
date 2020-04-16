@@ -17,12 +17,7 @@ class HomeTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertSeeText('Melody G. Casinillo Laravel');
+        $response->assertSeeText('Dashboard','You are logged in!');
     }
-    public function testLaravelPageIsWorkingCorrectly()
-    {
-        $response = $this->get('/contact');
-
-        $response->assertSeeText('Welcome to Laravel!');
-    }
+   
 }

@@ -1,132 +1,141 @@
 <?php
 
 namespace Tests\Feature;
+
+
 use App\BlogPost;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Comment;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PostTest extends TestCase
 {
     use RefreshDatabase;
-
-
-    
-    public function testNoBlogPostsWhenThereIs1WithNoComments()
+    public function testNoBlogPostsWhenNothingInDatabase()
     {
         $response = $this->get('/posts');
-
         $response->assertSeeText('No blog posts');
     }
-    public function testSee1BlogPostWhenThereIs1()
-    {
-        //arrange
-        $post = $this->createdDummyBlogPost();
-        //act
-        $response = $this->get('/posts');
 
-        //assert
+    
+    public function testSee1BlogPostWhenThereIs1WithNoComments()
+    {
+        // Arrange
+        $post = $this->createDummyBlogPost();
+        // Act
+        $response = $this->get('/posts');
+        // Assert
         $response->assertSeeText('New title');
         $response->assertSeeText('No comments yet!');
 
-        $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
+        $this->assertDatabaseHas('blog_posts', [
+                       'title' => 'New title',
+        ]);
     }
+
     public function testSee1BlogPostWithComments()
     {
-        $post = $this->createdDummyBlogPost();
-        factory(Comment::class,4)->create(['blog_post_id'=>$post->id]);
+        // Arrange
+        $post = $this->createDummyBlogPost();
+        factory(Comment::class, 4)->create([
+           
+            'blog_post_id' => $post->id,
+        ]);
+
         $response = $this->get('/posts');
         $response->assertSeeText('4 comments');
-
-
     }
-
     public function testStoreValid()
     {
-        $user =$this->user();
-$params=[
-    'title'=>'Valid title',
-    'content'=>'Atleast 10 characters'
-];
+        $params = [
+            'title' => 'Valid title',
+           
+            'content' => 'Atleast 10 characters',
+        ];
 
-$this->actingAs($this->user())
+        $this->actingAs($this->user())
             ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
-
-
-$this->assertEquals(session('status'),'Blog post was created');
+        $this->assertEquals(session('status'), 'Blog post was created');
     }
-
     public function testStoreFail()
     {
-
-        $params=[
-            'title'=>'x',
-            'content'=>'x'
+        $params = [
+            'title' => 'x',
+           
+            'content' => 'x',
         ];
+
         $this->actingAs($this->user())
             ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
-
-$messages=session('errors')->getMessages();
-
-$this->assertEquals($messages['title'][0],"The title must be at least 5 characters.");
-$this->assertEquals($messages['content'][0],"The content must be at least 5 characters.");
-
+        $messages = session('errors')->getMessages();
+        $this->assertEquals($messages['title'][0],"The title must be at least 5 characters.");
+        $this->assertEquals($messages['content'][0],"The content must be at least 5 characters.");
     }
+
     public function testUpdateValid()
     {
+       
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
 
-  
-        $post = $this->createdDummyBlogPost();
+        $this->assertDatabaseHas('blog_posts', $post->toArray());
 
-            $post->save();
-        $params=[
-            'title'=>'name changed',
-            'content'=>'content changed'
+        $params = [
+            'title' => 'name changed',
+            
+            'content' => 'content changed',
         ];
-        $this->actingAs($this->user())
-        ->put("/posts/{$post->id}", $params)
-        ->assertStatus(403)
-        ->assertSessionHas('status');
-$this->assertEquals(session('status'),'Blog post was updated');
 
-$this->assertDatabaseHas('blog_posts',['title'=>'New title']);
+        
+        $this->actingAs($user)
+            ->put("/posts/{$post->id}", $params)
+            ->assertStatus(302)
+            ->assertSessionHas('status');
 
+        $this->assertEquals(session('status'), 'Blog post was updated');
+        $this->assertDatabaseMissing('blog_posts', $post->toArray());
+        $this->assertDatabaseHas('blog_posts', [
+           
+            'title' => 'name changed',
+        ]);
     }
+
+ 
     public function testDelete()
     {
-    
-        $post = $this->createdDummyBlogPost();
-        $this->assertDatabaseHas('blog_posts',['title'=>'New title']);
-       
-        $this->actingAs($this->user())
-            ->delete("/posts/{$post->id}")
-            ->assertStatus(403)
-            ->assertSessionHas('status');
-        $this->assertEquals(session('status'),'Blog post was deleted');
-       // $this->assertDatabaseMissing('blog_posts', $post->toArray());
-       $this->assertSoftDeleted('blog_posts', $post->toArray());
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
+                $this->assertDatabaseHas('blog_posts', $post->toArray());
+
       
+        $this->actingAs($user)
+            ->delete("/posts/{$post->id}")
+            ->assertStatus(302)
+            ->assertSessionHas('status');
+        $this->assertEquals(session('status'), 'Blog post was deleted');
+        // $this->assertDatabaseMissing('blog_posts', $post->toArray());
+        $this->assertSoftDeleted('blog_posts', $post->toArray());
     }
-    private function createdDummyBlogPost():BlogPost
-    {
-       // $post = new BlogPost();
-       // $post->title='New title';
-       // $post->content='Content of the blog post';
-        //$post->save();
-        return factory(BlogPost::class)->states('new-title')->create();
-       // return $post;
-
-    }
-
-    }
-
-
 
     
+    private function createDummyBlogPost($userId = null): BlogPost
+    {
+        // $post = new BlogPost();
+        // $post->title = 'New title';
+        // $post->content = 'Content of the blog post';
+        // $post->save();
 
+      
+        return factory(BlogPost::class)->states('new-title')->create(
+            [
+                'user_id' => $userId ?? $this->user()->id,
+            ]
+        );
 
-
+        // return $post;
+    }
+}

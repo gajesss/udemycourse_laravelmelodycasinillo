@@ -5,7 +5,7 @@ use App\BlogPost;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+
 
 
 // [
@@ -50,6 +50,7 @@ class PostController1 extends Controller
     public function store(StorePost $request)
     {
         $validatedData = $request->validated();
+        $validatedData['user_id'] = $request->user()->id;
         $blogPost =  BlogPost::create($validatedData);
         $request->session()->flash('status','Blog post was created');
         return redirect()->route('posts.show',['post'=>$blogPost->id]);
@@ -58,7 +59,7 @@ class PostController1 extends Controller
 
      public function show( $id)
      {
-         return view('posts.show',['post'=>BlogPost::with('comments')->FindOrFail($id)]);
+         return view('posts.show',['post'=>BlogPost::with('comments')->FindOrFail($id,)]);
          //$request->session()->reflash;
          
      }

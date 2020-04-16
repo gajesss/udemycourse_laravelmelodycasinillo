@@ -20,7 +20,8 @@ Route::get('/secret', 'HomeController@secret')
      ->name('secret')
      ->middleware('can:home.secret');
 Route::get('/contact', 'HomeController@contact' )->name('contact');
-Route::get('/', 'HomeController@welcome' )->name('welcome');
+Route::get('/welcome', 'HomeController@welcome' )->name('welcome');
+
 Route::resource ('/posts', 'PostController1');
 
 
