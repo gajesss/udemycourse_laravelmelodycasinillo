@@ -40,7 +40,10 @@ class PostController1 extends Controller
         //dd(DB::getQueryLog());
         return view(
             'posts.index',
-            ['posts' => BlogPost::latest()->withCount('comments')->get()]);
+            [
+                'posts' => BlogPost::latest()->withCount('comments')->get(),
+                'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+            ]);
     }
 
     public function create()
