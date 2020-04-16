@@ -38,7 +38,9 @@ class PostController1 extends Controller
        //     }
        // }
         //dd(DB::getQueryLog());
-        return view('posts.index',['posts'=>BlogPost::withCount('comments')->orderBy('created_at','desc')->get()]);
+        return view(
+            'posts.index',
+            ['posts' => BlogPost::latest()->withCount('comments')->get()]);
     }
 
     public function create()
@@ -59,6 +61,11 @@ class PostController1 extends Controller
 
      public function show( $id)
      {
+         // return view('posts.show', [
+        //     'post' => BlogPost::with(['comments' => function ($query) {
+        //         return $query->latest();
+        //     }])->findOrFail($id),
+        // ]);
          return view('posts.show',['post'=>BlogPost::with('comments')->FindOrFail($id,)]);
          //$request->session()->reflash;
          

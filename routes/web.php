@@ -15,12 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home', 'HomeController@home' )->name('home');//->middleware('auth');
+Route::get('/', 'HomeController@home' )->name('home');//->middleware('auth');
+Route::get('/home', 'HomeController@home' )->name('start');
+Route::get('/welcome', 'HomeController@welcome' )->name('welcome');
 Route::get('/secret', 'HomeController@secret')
      ->name('secret')
      ->middleware('can:home.secret');
 Route::get('/contact', 'HomeController@contact' )->name('contact');
-Route::get('/welcome', 'HomeController@welcome' )->name('welcome');
+
 
 Route::resource ('/posts', 'PostController1');
 
