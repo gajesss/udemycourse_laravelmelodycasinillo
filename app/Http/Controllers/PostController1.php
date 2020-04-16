@@ -5,6 +5,7 @@ use App\BlogPost;
 use App\Http\Requests\StorePost;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\User;
 
 
 
@@ -43,6 +44,7 @@ class PostController1 extends Controller
             [
                 'posts' => BlogPost::latest()->withCount('comments')->get(),
                 'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+                'mostActive' => User::withMostBlogPosts()->take(5)->get(),
             ]);
     }
 
