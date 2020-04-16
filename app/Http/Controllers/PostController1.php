@@ -38,7 +38,7 @@ class PostController1 extends Controller
        //     }
        // }
         //dd(DB::getQueryLog());
-        return view('posts.index',['posts'=>BlogPost::withCount('comments')->get()]);
+        return view('posts.index',['posts'=>BlogPost::withCount('comments')->orderBy('created_at','desc')->get()]);
     }
 
     public function create()

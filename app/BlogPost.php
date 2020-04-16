@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,12 +22,15 @@ class BlogPost extends Model
         return $this->belongsTo('App\User');
     }
     
+
     public static function boot()
     {
         parent::boot();
         // static::deleting(function (BlogPost $blogPost) {
         //     $blogPost->comments()->delete();
         // });
+        
+        static::addGlobalScope(new LatestScope);
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
         });
