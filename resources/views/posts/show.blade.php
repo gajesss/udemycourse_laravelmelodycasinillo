@@ -5,8 +5,10 @@
 <p>{{ $post->content }}</p>
 <p>Added {{ $post->created_at->diffForHumans() }}</p>
 
-@if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 5)
-    <strong>New!</strong>
+@if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 20)
+@component('components.badge', ['type' => 'primary'])
+Brand new Post!
+@endcomponent
 @endif
 <h4>Comments</h4>
 @forelse($post->comments as $comment)
