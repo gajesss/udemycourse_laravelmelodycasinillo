@@ -1,24 +1,32 @@
 @extends('layout')
 
 @section('content')
-<h1>{{ $post->title }}</h1>
-<p>{{ $post->content }}</p>
-<p>Added {{ $post->created_at->diffForHumans() }}</p>
-
-@if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 20)
-@component('components.badge', ['type' => 'primary'])
+<h1>{{ $post->title }}
+@if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 30)
+@component('components.badge', ['type' => 'primary'],['show'=>true])
 Brand new Post!
 @endcomponent
 @endif
+</h1>
+
+<p>{{ $post->content }}</p>
+
+
+@component('components.updated',['date' => $post->created_at, 'name' => $post->user->name])
+@endcomponent
+@component('components.updated',['date' => $post->updated_at])
+    Updated
+@endcomponent
+
 <h4>Comments</h4>
+
 @forelse($post->comments as $comment)
-<p>
-    {{ $comment->content }}, added {{ $comment->created_at->diffForHumans ()}}
-</p>
-<p class="text-muted">
-    added {{ $comment->created_at->diffForHumans ()}}
-</p>
+    <p>
+        {{ $comment->content }}
+    
+        @component('components.updated',['date' => $comment->created_at])
+    @endcomponent
 @empty
-<p>no comments po</p>
+    <p>No comments yet!</p>
 @endforelse
 @endsection('content')
