@@ -17,7 +17,7 @@ class HomeTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertSeeText('Dashboard','You are logged in!');
+        $response->assertSeeText('Welcome to Laravel!');
     }
    
 }

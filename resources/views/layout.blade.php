@@ -1,6 +1,15 @@
+<?php
+use DebugBar\StandardDebugBar;
+
+$debugbar = new StandardDebugBar();
+$debugbarRenderer = $debugbar->getJavascriptRenderer();
+
+$debugbar["messages"]->addMessage("hello world!");
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <?php echo $debugbarRenderer->renderHead() ?>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -11,10 +20,11 @@
     <title>Melody</title>
 </head>
 <body>
+   
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto font-weight-normal">MELODY GAJES CASINILLO</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2 text-dark" href="{{ route('welcome') }}">Start</a></li>
+           
             <a class="p-2 text-dark" href="{{ route('home') }}">Home</a>
             <a class="p-2 text-dark" href="{{ route('contact') }}">Contact</a>
             <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
@@ -53,6 +63,7 @@
      
     @yield('content')
     </div>
-    <script src="{{ mix('js/app.js')}}"></script'>
+    
+    <?php echo $debugbarRenderer->render() ?>
 </body>
 </html>

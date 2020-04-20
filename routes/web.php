@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,18 +11,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@home' )->name('home');//->middleware('auth');
-Route::get('/home', 'HomeController@home' )->name('start');
-Route::get('/welcome', 'HomeController@welcome' )->name('welcome');
+Route::get('/', 'HomeController@home')
+  ->name('home')
+  // ->middleware('auth')
+  ;
+Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::get('/secret', 'HomeController@secret')
-     ->name('secret')
-     ->middleware('can:home.secret');
-Route::get('/contact', 'HomeController@contact' )->name('contact');
-
-
-Route::resource ('/posts', 'PostController1');
-
+  ->name('secret')
+  ->middleware('can:home.secret');
+Route::resource('/posts', 'PostController');
 
 Auth::routes();
+
 
 
