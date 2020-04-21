@@ -17,6 +17,7 @@ Brand new Post!
 @component('components.updated',['date' => $post->updated_at])
     Updated
 @endcomponent
+<p>Currently read by {{ $counter }} people</p>
 
 <h4>Comments</h4>
 
