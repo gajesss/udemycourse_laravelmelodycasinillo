@@ -15,6 +15,8 @@
                </del>
            @endif
             </h3>
+            @component('components.tags',['tags' => $post->tags])@endtags
+            @endcomponent
             @component('components.updated',['date' => $post->created_at, 'name' => $post->user->name])
             @endcomponent
             @if($post->comments_count)

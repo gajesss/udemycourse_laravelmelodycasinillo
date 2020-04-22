@@ -17,6 +17,8 @@ Brand new Post!
 @component('components.updated',['date' => $post->updated_at])
     Updated
 @endcomponent
+@component('components.tags',['tags' => $post->tags])@endtags
+@endcomponent
 <p>Currently read by {{ $counter }} people</p>
 
 <h4>Comments</h4>
