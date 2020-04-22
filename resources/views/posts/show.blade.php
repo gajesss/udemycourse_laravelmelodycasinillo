@@ -1,13 +1,14 @@
 @extends('layout')
 
 @section('content')
-<h1>{{ $post->title }}
-@if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 30)
-@component('components.badge', ['type' => 'primary'],['show'=>true])
-Brand new Post!
-@endcomponent
-@endif
-</h1>
+<div class="row">
+    <div class="col-8">
+        <h1>
+            {{ $post->title }}
+            @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
+                Brand new Post!
+            @endbadge
+        </h1>
 
 <p>{{ $post->content }}</p>
 
@@ -22,14 +23,17 @@ Brand new Post!
 <p>Currently read by {{ $counter }} people</p>
 
 <h4>Comments</h4>
-
 @forelse($post->comments as $comment)
-    <p>
-        {{ $comment->content }}
-    
-        @component('components.updated',['date' => $comment->created_at])
-    @endcomponent
-@empty
-    <p>No comments yet!</p>
-@endforelse
+            <p>
+                {{ $comment->content }}
+            </p>
+            @updated(['date' => $comment->created_at])
+            @endupdated
+        @empty
+            <p>No comments yet!</p>
+        @endforelse
+    </div>
+    <div class="col-4">
+        @include('posts._activity')
+    </div>
 @endsection('content')
