@@ -5,9 +5,9 @@
     <div class="col-8">
         <h1>
             {{ $post->title }}
-            @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
+            @component('components.badge',['show' => now()->diffInMinutes($post->created_at) < 30])
                 Brand new Post!
-            @endbadge
+            @endcomponent
         </h1>
 
 <p>{{ $post->content }}</p>
@@ -23,12 +23,15 @@
 <p>Currently read by {{ $counter }} people</p>
 
 <h4>Comments</h4>
+
+@include('comments._form')
+
 @forelse($post->comments as $comment)
             <p>
                 {{ $comment->content }}
             </p>
-            @updated(['date' => $comment->created_at,'name' => $comment->user->name])])
-            @endupdated
+            @component('components.updated',['date' => $comment->created_at,'name' => $comment->user->name])
+            @endcomponent
         @empty
             <p>No comments yet!</p>
         @endforelse
