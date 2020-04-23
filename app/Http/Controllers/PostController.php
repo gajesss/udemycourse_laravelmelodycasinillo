@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\BlogPost;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Storage;
+
 use App\User;
 use Illuminate\Support\Facades\Cache;
 
@@ -124,6 +127,10 @@ class PostController extends Controller
             dump($file->getClientOriginalExtension());
 
             dump($file->store('thumbails'));
+            dump(Storage::disk('public')->putFile('thumbails', $file));
+
+            dump($file->storeAs('thumbails', $blogPost->id . '.'. $file->guessExtension()));
+            dump(Storage::disk('local')->putFileAs('thumbails', $file, $blogPost->id . '.' . $file->guessExtension()));
         }
         die;
         $request->session()->flash('status', 'Blog post was created!');
