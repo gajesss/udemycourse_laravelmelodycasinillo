@@ -17,7 +17,7 @@
             </h3>
             @component('components.tags',['tags' => $post->tags])@endtags
             @endcomponent
-            @component('components.updated',['date' => $post->created_at, 'name' => $post->user->name])
+            @component('components.updated',['date' => $post->created_at, 'name' => $post->user->name, 'userId' => $post->user->id])
             @endcomponent
             @if($post->comments_count)
                 <p>{{ $post->comments_count }} comments</p>
