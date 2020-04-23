@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
@@ -12,5 +12,9 @@ class Image extends Model
     {
         
         return $this->belongsTo('App\BlogPost');
+    }
+    public function url()
+    {
+        return Storage::url($this->path);
     }
 }

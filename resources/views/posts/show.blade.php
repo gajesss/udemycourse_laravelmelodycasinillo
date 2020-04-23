@@ -30,6 +30,8 @@
             <p>
                 {{ $comment->content }}
             </p>
+            <img src="{{ $post->image->url() }}" />
+
             @component('components.updated',['date' => $comment->created_at,'name' => $comment->user->name])
             @endcomponent
         @empty
