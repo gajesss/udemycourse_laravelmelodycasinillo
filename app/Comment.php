@@ -4,10 +4,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Comment extends Model
 {
     use SoftDeletes;
+    protected $fillable=['user_id'.'content'];
     public function blogPost()
     {
         return $this->belongsTo('App\BlogPost');
@@ -25,6 +27,8 @@ class Comment extends Model
     {
         parent::boot();
 
-       // static::addGlobalScope(new LatestScope);
+        static::creating(function (BlogPost $blogPost) {
+            Cache::forget("blog-post-{$blogPost->id}");
+        });
 }
 }

@@ -11,6 +11,11 @@
         
 
 </div>
+<div class="form-group">
+    <label>Thumbnail</label>
+    <input type="file" name="thumbnail" class="form-control-file"/>
+</div>
+
 @component('components.errors')
 @endcomponent
             
