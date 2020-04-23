@@ -3,12 +3,22 @@
 @section('content')
 <div class="row">
     <div class="col-8">
-        <h1>
+        @if($post->image)
+        <div style="background-image: url('{{ $post->image->url() }}'); min-height: 500px; color: white; text-align: center; ">
+            <h1 style="padding-top: 100px; text-shadow: 1px 2px #000">
+        @else
+            <h1>
+        @endif
             {{ $post->title }}
             @component('components.badge',['show' => now()->diffInMinutes($post->created_at) < 30])
                 Brand new Post!
             @endcomponent
+            @if($post->image)    
         </h1>
+    </div>
+    @else
+        </h1>
+    @endif
 
 <p>{{ $post->content }}</p>
 
@@ -30,8 +40,7 @@
             <p>
                 {{ $comment->content }}
             </p>
-            <img src="{{ $post->image->url() }}" />
-
+            
             @component('components.updated',['date' => $comment->created_at,'name' => $comment->user->name])
             @endcomponent
         @empty
