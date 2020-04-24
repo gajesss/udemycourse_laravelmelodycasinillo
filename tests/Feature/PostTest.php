@@ -82,7 +82,7 @@ class PostTest extends TestCase
         $messages = session('errors')->getMessages();
 
         $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');
-        $this->assertEquals($messages['content'][0], 'The content must be at least 5 characters.');
+        $this->assertEquals($messages['content'][0], 'The content must be at least 10 characters.');
     }
 
     public function testUpdateValid()
