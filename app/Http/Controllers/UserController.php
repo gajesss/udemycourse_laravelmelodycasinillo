@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\User;
@@ -14,7 +13,6 @@ class UserController extends Controller
         $this->middleware('auth');
         $this->authorizeResource(User::class, 'user');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +22,6 @@ class UserController extends Controller
     {
         //
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -34,7 +31,6 @@ class UserController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -45,7 +41,6 @@ class UserController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      *
@@ -54,12 +49,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.show', [
-            'user' => $user,
-            ['user'=>$user]
-        ]);
+        return view('users.show', ['user' => $user]);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -68,17 +59,19 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', [
-            'user' => $user,
-            ['user'=>$user]
-        ]);
+        return view('users.edit', ['user' => $user]);
     }
-
-    
-    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+  
     public function update(UpdateUser $request, User $user)
     {
-     
+        dd($user);
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatars');
 

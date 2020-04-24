@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="col-4">
-                
+               
                 <img src="{{ $user->image ? $user->image->url() : '' }}" 
                 class="img-thumbnail avatar" />
 
@@ -24,6 +24,7 @@
                     <label>Name:</label>
                     <input class="form-control" value="" type="text" name="name" />
                 </div>
+
 
                 @component('components.errors')
                 @endcomponent
