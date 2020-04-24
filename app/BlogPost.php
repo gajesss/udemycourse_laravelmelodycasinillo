@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\DeletedAdminScope;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\Taggable;
 
 class BlogPost extends Model
 {
     // protected $table = 'blogposts';
 
-    use SoftDeletes;
-
+    use SoftDeletes, Taggable;
     protected $fillable = ['title', 'content', 'user_id'];
 
     public function comments()
@@ -23,10 +23,8 @@ class BlogPost extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function tags()
-    {
-        return $this->belongsToMany('App\Tag')->withTimestamps();
-    }
+    
+    
     public function image()
     {
         

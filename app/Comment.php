@@ -5,10 +5,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\Taggable;
 
 class Comment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
+
 
     protected $fillable = ['user_id', 'content'];
 
@@ -25,6 +27,7 @@ class Comment extends Model
     {
         return $this->belongsTo('App\User');
     }
+   
     public function scopeLatest(Builder $query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
