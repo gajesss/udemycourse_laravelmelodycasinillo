@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateUser;
+use App\Image;
 
 class UserController extends Controller
 {
@@ -72,16 +74,27 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
+    
+    
+    public function update(UpdateUser $request, User $user)
     {
         dd($user);
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars');
+
+            if ($user->image) {
+                $user->image->path = $path;
+                $user->image->save();
+            } else {
+                $user->image()->save(
+                    Image::make(['path' => $path])
+                );
+            }
+        }
+
+        return redirect()
+            ->back()
+            ->withStatus('Profile image was updated!');
     }
 
     /**
