@@ -1,24 +1,26 @@
 <?php
-
 namespace App\Mail;
-
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Comment;
 class CommentPostedMarkdown extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $comment;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    
+    public function __construct(Comment $comment)
     {
-        //
+
+        $this->comment = $comment;
     }
 
     /**
@@ -28,6 +30,9 @@ class CommentPostedMarkdown extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.posts.commented-markdown');
+       
+        $subject = "Commented was posted on your {$this->comment->commentable->title} blog post";
+        return $this->subject($subject)
+            ->markdown('emails.posts.commented-markdown');
     }
 }
