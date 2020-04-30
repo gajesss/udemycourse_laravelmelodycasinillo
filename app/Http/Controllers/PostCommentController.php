@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreComment;
 use App\BlogPost;
 use App\Mail\CommentPostedMarkdown;
+use App\Jobs\NotifyUsersPostWasCommented;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CommentPosted;
@@ -19,16 +20,30 @@ class PostCommentController extends Controller
     }
     public function store(BlogPost $post, StoreComment $request)
     {
-        // Comment::create()
         $comment = $post->comments()->create([
             'content' => $request->input('content'),
             'user_id' => $request->user()->id
         ]);
-        Mail::to($post->user)->send(
+        // Mail::to($post->user)->send(
+        //     new CommentPostedMarkdown($comment)
+        // );
+
+        $when = now()->addMinutes(1);
+
+        // Mail::to($post->user)->queue(
+        //     new CommentPostedMarkdown($comment)
+        // );
+
+        Mail::to($post->user)->queue(
             new CommentPostedMarkdown($comment)
         );
+        NotifyUsersPostWasCommented::dispatch($comment);
 
-      
+        // Mail::to($post->user)->later(
+        //     $when,
+        //     new CommentPostedMarkdown($comment)
+        // );
+
         return redirect()->back()
             ->withStatus('Comment was created!');
     }
