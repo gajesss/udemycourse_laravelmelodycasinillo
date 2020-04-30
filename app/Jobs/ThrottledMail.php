@@ -7,22 +7,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailable;
 use App\User;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\CommentPostedOnPostWatched;
-
-class NotifyUsersPostWasCommented implements ShouldQueue
+class ThrottledMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $user;
+    public $mail;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Mailable $mail, User $user)
     {
-        //
+        $this->mail = $mail;
+        $this->user = $user;
     }
 
     /**
@@ -32,15 +36,10 @@ class NotifyUsersPostWasCommented implements ShouldQueue
      */
     public function handle()
     {
-        User::thatHasCommentedOnPost($this->comment->commentable)
-        ->get()
-        ->filter(function (User $user) {
-            return $user->id !== $this->comment->user_id;
-        })->map(function (User $user) {
-            ThrottledMail::dispatch(
-                new CommentPostedOnPostWatched($this->comment, $user),
-                $user
-            );
+        Redis::throttle('mailtrap')->allow(2)->every(12)->then(function () {
+            Mail::to($this->user)->send($this->mail);
+        }, function () {
+            return $this->release(5);
         });
     }
 }
